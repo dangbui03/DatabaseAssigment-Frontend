@@ -2,7 +2,10 @@ import getMovieScreening from "@/lib/getMovieScreening";
 import getMovieNameFromID from "@/lib/getMovieNameFromID";
 import MovieScreeningImage from "./components/movieScreeningImage";
 import MovieScreeningDesc from "./components/movieScreeningDesc";
+import getFormattedDate from "@/lib/getFormattedDate";
+import Ticket from "./components/Ticket";
 import getMovie from "@/lib/getMovie";
+import getMovies from "@/lib/getMovies";
 
 type Props = {
   params: {
@@ -12,22 +15,25 @@ type Props = {
 
 export async function generateMetadata({ params: { movieScreening } }: Props) {
   let data: movieScreening = {
-    ID: movieScreening.split("_")[0],
+    ID: Number(movieScreening.split("_")[0]),
     RNUMBER: movieScreening.split("_")[1],
     MOVIETIME: movieScreening.split("_")[2].replaceAll("-", "/"),
-    MSSTARTIME: movieScreening.split("_")[3].replaceAll("-", ":"),
   };
 
   const movieScreeningData: Promise<movieScreening> = getMovieScreening(data);
   data = await movieScreeningData;
 
-  const displayTerm = await getMovieNameFromID(data.ID);
-
   if (!data) {
     return {
-      title: `${displayTerm} Not Found`,
+      title: `Screening not found `,
     };
   }
+
+  const movies = await getMovies();
+  const displayTerm = `${getMovieNameFromID(
+    data.ID,
+    movies
+  )} ${getFormattedDate(data.MOVIETIME)}`;
 
   return {
     title: displayTerm,
@@ -36,23 +42,30 @@ export async function generateMetadata({ params: { movieScreening } }: Props) {
 }
 
 async function movieScreening({ params: { movieScreening } }: Props) {
-  let Sdata: movieScreening = {
-    ID: movieScreening.split("_")[0],
+  const screening: movieScreening = {
+    ID: Number(movieScreening.split("_")[0]),
     RNUMBER: movieScreening.split("_")[1],
     MOVIETIME: movieScreening.split("_")[2].replaceAll("-", "/"),
-    MSSTARTIME: movieScreening.split("_")[3].replaceAll("-", ":"),
   };
 
-  const movieScreeningData: Promise<movieScreening> = getMovieScreening(Sdata);
+  const movieScreeningData: Promise<movieScreening> =
+    getMovieScreening(screening);
 
-  Sdata = await movieScreeningData;
+  const Sdata = await movieScreeningData;
 
   const Mdata = await getMovie(Sdata.ID);
+  const movies = await getMovies();
+
+  const displayTerm = `${getMovieNameFromID(
+    Sdata.ID,
+    movies
+  )} ${getFormattedDate(Sdata.MOVIETIME)}`;
 
   return (
-    <main>
-      <MovieScreeningImage ID={Sdata.ID} no="1" width={1200} height={1200} />
+    <main className="grid grid-cols-2 gap-10 h-screen pt-24">
+      <MovieScreeningImage ID={Sdata.ID} name={Mdata.MNAME} />
       <MovieScreeningDesc movie={Mdata} movieScreening={Sdata} />
+      <Ticket url={movieScreening} screening={Sdata} />
     </main>
   );
 }

@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/navbar/Navbar";
-import ScreeningNav from "./components/navbar/ScreeningNav";
+import Header from "./components/header/Header";
+import { Averia_Serif_Libre } from "next/font/google";
+import MovieScreeningContextProvider from "./context/MovieScreeningContextProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const averia = Averia_Serif_Libre({
+  subsets: ["latin"],
+  weight: ["300"],
+  display: "swap",
+  variable: "--font-averia",
+});
 
 export const metadata: Metadata = {
   title: "Retro cinema",
@@ -18,11 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Navbar />
-        <ScreeningNav />
-        {children}
+    <html lang="en" className={`${averia.variable}`}>
+      <body className="flex">
+        <MovieScreeningContextProvider>
+          <Header />
+          {children}
+        </MovieScreeningContextProvider>
       </body>
     </html>
   );

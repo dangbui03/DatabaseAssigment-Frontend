@@ -1,8 +1,4 @@
-import getMovies from "./getMovies";
-
-export default async function getMovieNameFromID(ID: string): Promise<string> {
-    const movies = await getMovies()
-
+export default function getMovieNameFromID(ID: number, movies: movie[]): string {
     const name = movies.find((movie) => {
         return movie.ID === ID
     })?.MNAME as string

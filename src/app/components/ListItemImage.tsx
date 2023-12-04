@@ -2,14 +2,14 @@ import Image from "next/image";
 import getMovieNameFromID from "@/lib/getMovieNameFromID";
 
 type Props = {
-  ID: string;
+  ID: number;
   no: string;
   width: number;
   height: number;
+  name: string;
 };
 
-export default async function ListItemImage({ ID, no, width, height }: Props) {
-  const name = await getMovieNameFromID(ID);
+export default function ListItemImage({ ID, no, width, height, name }: Props) {
   return (
     <Image
       src={`/filmImage/${ID}_${no}.jpg`}

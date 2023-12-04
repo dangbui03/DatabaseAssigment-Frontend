@@ -1,11 +1,7 @@
-import getMovies from "./getMovies";
-
-export default async function getMovie(ID: string): Promise<movie> {
-    const movies = await getMovies()
-
-    const name = movies.find((movie) => {
-        return movie.ID === ID
-    }) as movie
-
-    return name
+export default async function getMovie(ID: number): Promise<movie> {
+    const res = await fetch(`http://127.0.0.1:8080/api/v2/movie?id=${ID}`, {
+        method: 'GET',
+    });
+    const data = await res.json();
+    return data[0]
 }

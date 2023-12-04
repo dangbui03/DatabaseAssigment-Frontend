@@ -13,6 +13,15 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      fontFamily: {
+        averia: ['var(--font-averia)']
+      },
+      width: {
+        '128': '32rem',
+        '192': '48rem',
+        '256': '64rem',
+        '384': '96rem',
+      }
     },
   },
   plugins: [],

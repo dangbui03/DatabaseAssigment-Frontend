@@ -7,7 +7,17 @@ export default function Navbar() {
   const currentRoute = usePathname();
   return (
     <nav>
-      <ul>
+      <ul className="flex gap-10 text-2xl">
+        <li>
+          <Link
+            href={"/"}
+            className={
+              currentRoute === "/" ? "active-route" : "" + " whitespace-nowrap"
+            }
+          >
+            <NavItem text="Home" />
+          </Link>
+        </li>
         <li>
           <Link
             href={"/movie"}
